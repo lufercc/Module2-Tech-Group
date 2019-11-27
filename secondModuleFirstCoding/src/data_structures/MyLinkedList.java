@@ -1,17 +1,15 @@
 package data_structures;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class MyLinkedList<T> implements List<T> {
 
-    private Node first;
-    private Node last;
+    private Node<T> first;
+    private Node<T> last;
     private Integer size;
+//    private LinkedList
 
-    public Node getFirst() {
+    public Node<T> getFirst() {
         return first;
     }
 
@@ -19,12 +17,17 @@ public class MyLinkedList<T> implements List<T> {
         this.first = first;
     }
 
-    public Node getLast() {
+    public Node<T> getLast() {
         return last;
     }
 
     public void setLast(Node last) {
+        if (isEmpty()){
+            this.first = this.last = last;
+        }
+        getLast().setNext(last);
         this.last = last;
+        this.size = this.last.getIndex()+1;
     }
 
     public Integer getSize() {
@@ -35,73 +38,127 @@ public class MyLinkedList<T> implements List<T> {
         this.size = size;
     }
 
+
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size > 0? false : true;
     }
 
     @Override
     public boolean contains(Object o) {
+        Node current = first;
+        while (current != null) {
+            if (current.getValue().equals(o)) {
+                return true;
+            }
+            current = current.getNext();
+        }
         return false;
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return null;
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] objects = new Object[this.size];
+        if (!isEmpty()) {
+            Node current = first;
+            for (int i = 0; i < this.size; i++) {
+                objects[i] = current.getValue();
+                current = current.getNext();
+            }
+        }
+        return objects;
     }
 
     @Override
-    public boolean add(Object o) {
-        return false;
+    public <T1> T1[] toArray(T1[] a) {
+        return null;
+    }
+
+    @Override
+    public boolean add(T t) {
+        Node addNode = new Node<T>(t);
+        this.setLast(addNode);
+        return true;
     }
 
     @Override
     public boolean remove(Object o) {
+        Node current = first;
+        while (current != null) {
+            if (current.getValue().equals(o)) {
+                current.setValue(null);
+                return true;
+            }
+            current = current.getNext();
+        }
         return false;
     }
 
     @Override
-    public boolean addAll(Collection c) {
+    public boolean containsAll(Collection<?> c) {
         return false;
     }
 
     @Override
-    public boolean addAll(int index, Collection c) {
+    public boolean addAll(Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
         return false;
     }
 
     @Override
     public void clear() {
-
+        this.first = null;
+        this.last = null;
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
+        Node<T> current = first;
+        while (current != null) {
+            if (current.getIndex() == index) {
+                return current.getValue();
+            }
+            current = current.getNext();
+        }
         return null;
     }
 
     @Override
-    public Object set(int index, Object element) {
+    public T set(int index, T element) {
         return null;
     }
 
     @Override
-    public void add(int index, Object element) {
+    public void add(int index, T element) {
 
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         return null;
     }
 
@@ -116,37 +173,23 @@ public class MyLinkedList<T> implements List<T> {
     }
 
     @Override
-    public ListIterator listIterator() {
+    public ListIterator<T> listIterator() {
         return null;
     }
 
     @Override
-    public ListIterator listIterator(int index) {
+    public ListIterator<T> listIterator(int index) {
         return null;
     }
 
     @Override
-    public List subList(int fromIndex, int toIndex) {
-        return null;
-    }
-
-    @Override
-    public boolean retainAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public Object[] toArray(Object[] a) {
-        return new Object[0];
+    public List<T> subList(int fromIndex, int toIndex) {
+        MyLinkedList<T> sublist = new MyLinkedList<T>();
+        Node first = new Node<T>(get(fromIndex));
+        Node last = new Node<T>(get(toIndex));
+        last.setNext(null);
+        sublist.setFirst((first));
+        sublist.setLast((last));
+        return sublist;
     }
 }
