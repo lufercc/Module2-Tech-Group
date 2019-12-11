@@ -175,22 +175,65 @@ public class MyLinkedList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        return null;
+        if (index >= this.size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> auxNode = first;
+
+        for ( int i = 0; i==index; i++)
+        {
+            auxNode = auxNode.getNext();
+        }
+        auxNode.setValue(element);
+        return element;
     }
 
     @Override
     public void add(int index, T element) {
+        if (index >= this.size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> auxNode = first;
+        Node<T> nodeToInsert = new Node<T>(element);
 
+        for ( int i = 0; i==index; i++)
+        {
+            auxNode = auxNode.getNext();
+        }
+        nodeToInsert.setNext(auxNode.getNext());
+        auxNode.setNext(nodeToInsert);
+        size ++;
     }
 
     @Override
     public T remove(int index) {
-        return null;
+        if (index >= this.size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> auxNode = first;
+
+        for ( int i = 0; i<=index; i++)
+        {
+            auxNode = auxNode.getNext();
+        }
+        Node<T> toDelete = auxNode.getNext();
+        auxNode.setNext(toDelete.getNext());
+        size --;
+        return toDelete.getValue();
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        int index = 0;
+        Node nodeAux = first;
+        while(nodeAux != null){
+            if (nodeAux.getValue() == o){
+                return index;
+            }
+            nodeAux = nodeAux.getNext();
+            index ++;
+        }
+        throw new IndexOutOfBoundsException();
     }
 
     @Override
