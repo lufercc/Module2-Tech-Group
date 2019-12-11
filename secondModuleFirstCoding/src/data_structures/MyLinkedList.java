@@ -22,12 +22,7 @@ public class MyLinkedList<T> implements List<T> {
     }
 
     public void setLast(Node last) {
-        if (isEmpty()){
-            this.first = this.last = last;
-        }
-        getLast().setNext(last);
         this.last = last;
-        this.size = this.last.getIndex()+1;
     }
 
     public Integer getSize() {
@@ -85,10 +80,20 @@ public class MyLinkedList<T> implements List<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        Node addNode = new Node<T>(t);
-        this.setLast(addNode);
-        return true;
+    public boolean add(T data) {
+        Node node = new Node(data);
+        if (first == null) {
+            first = node;
+            last = node;
+            size++;
+        }
+        else{
+            this.last.setNext(node);
+            last = node;
+            size++;
+        }
+
+        return false;
     }
 
     @Override
@@ -136,15 +141,36 @@ public class MyLinkedList<T> implements List<T> {
     }
 
     @Override
-    public T get(int index) {
-        Node<T> current = first;
-        while (current != null) {
-            if (current.getIndex() == index) {
-                return current.getValue();
+    public String toString() {
+        String value = "[";
+        Node nodeAux = first;
+        while(nodeAux != null){
+            if (nodeAux == last){
+                value = value + nodeAux.getValue().toString();
             }
-            current = current.getNext();
+            else {
+                value = value + nodeAux.getValue().toString() + ", ";
+
+            }
+
+            nodeAux = nodeAux.getNext();
         }
-        return null;
+        return value + "]";
+    }
+
+    @Override
+    public T get(int index) {
+        if (index >= this.size){
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> auxNode = first;
+
+        for ( int i = 0; i==index; i++)
+        {
+            auxNode = auxNode.getNext();
+        }
+
+        return auxNode.getValue();
     }
 
     @Override
