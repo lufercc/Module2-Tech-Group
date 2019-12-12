@@ -96,14 +96,27 @@ public class MyLinkedList<T> implements List<T> {
         return false;
     }
 
+    /**
+     * Method to delete an object found into a node
+     * @param o
+     * @return {true} if the item is deleted success and {false} if the object is not found
+     */
     @Override
     public boolean remove(Object o) {
-        Node current = first;
+        Node<T> current = first;
+        Node<T> previus = null;
         while (current != null) {
             if (current.getValue().equals(o)) {
+                if (first.equals(current)){
+                    first = current.getNext();
+                    return true;
+                }
+                previus.setNext(current.getNext());
                 current.setValue(null);
+                current.setNext(null);
                 return true;
             }
+            previus = current;
             current = current.getNext();
         }
         return false;
