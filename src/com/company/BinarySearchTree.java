@@ -67,4 +67,49 @@ public class BinarySearchTree {
         builder.append(cursor.getValue());
         visit(cursor.getRight(), builder);
     }
+
+    public boolean remove(int value) {
+        boolean result = false;
+        result = remove(this.root, null, value);
+        return result;
+    }
+
+    private boolean remove(Node cursor, Node parent, int value) {
+        if (cursor == null) {
+            return false;
+        }
+        boolean result = false;
+        if (cursor.getValue() == value) {
+            if (cursor.getRight() != null && cursor.getLeft() != null) {
+                int minRight = this.minRight(cursor.getRight());
+                cursor.setValue(minRight);
+                remove(cursor.getRight(), cursor, minRight);
+            } else if (cursor.getRight() != null) {
+                parent.setRight(cursor.getRight());
+            } else if (cursor.getLeft() != null) {
+                parent.setRight(cursor.getLeft());
+            } else {
+                if (cursor == parent.getLeft()) {
+                    parent.setLeft(null);
+                } else {
+                    parent.setRight(null);
+                }
+            }
+            result = true;
+        } else if (value < cursor.getValue()) {
+            result = remove(cursor.getLeft(), cursor, value);
+        } else {
+            result = remove(cursor.getRight(), cursor, value);
+        }
+        return result;
+    }
+
+    private int minRight(Node cursor) {
+        int minValue =0;
+        while(cursor != null){
+            minValue = cursor.getValue();
+            cursor = cursor.getLeft();
+        }
+        return minValue;
+    }
 }
